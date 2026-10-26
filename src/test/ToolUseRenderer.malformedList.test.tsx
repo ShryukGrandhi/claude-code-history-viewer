@@ -22,6 +22,9 @@ describe("ToolUseRenderer - malformed list members", () => {
     ["update_plan", { plan: [null] }],
     ["TodoWrite", { todos: [null] }],
     ["update_plan", { plan: "not a list" }],
+    ["TodoWrite", { todos: [null], file_path: "/tmp/a.ts", content: "x" }],
+    ["update_plan", { plan: [null], file_path: "/tmp/a.ts", old_string: "a", new_string: "b" }],
+    ["TodoWrite", { todos: [null], description: "d", prompt: "p" }],
   ])("falls back to the default renderer for %s with %j", (name, input) => {
     const { container } = render(
       <ExpandKeyProvider value="test-message">
