@@ -54,6 +54,12 @@ import {
   UpdatePlanToolRenderer,
 } from "./toolUseRenderers";
 
+// Absent, or an array of plain objects — anything else goes to the raw JSON view
+const isRecordList = (value: unknown): boolean =>
+  value === undefined ||
+  (Array.isArray(value) &&
+    value.every((item) => typeof item === "object" && item !== null && !Array.isArray(item)));
+
 interface ToolUseRendererProps extends BaseRendererProps {
   toolUse: Record<string, unknown>;
 }
@@ -123,6 +129,7 @@ export const ToolUseRenderer = memo(function ToolUseRenderer({
     case "MultiEdit":
       return <MultiEditToolRenderer toolId={toolId} input={toolInput} />;
     case "TodoWrite":
+      if (!isRecordList(toolInput.todos)) break;
       return <TodoWriteToolRenderer toolId={toolId} input={toolInput} />;
     case "NotebookEdit":
       return <NotebookEditToolRenderer toolId={toolId} input={toolInput} />;
@@ -137,6 +144,7 @@ export const ToolUseRenderer = memo(function ToolUseRenderer({
     case "apply_patch":
       return <ApplyPatchToolRenderer toolId={toolId} input={toolInput} />;
     case "update_plan":
+      if (!isRecordList(toolInput.plan)) break;
       return <UpdatePlanToolRenderer toolId={toolId} input={toolInput} />;
   }
 
